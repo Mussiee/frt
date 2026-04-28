@@ -1,0 +1,23 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(rtk ls *)",
+      "Bash(rtk find *)",
+      "Bash(rtk grep *)",
+      "Bash(flutter pub *)",
+      "Bash(flutter.bat pub *)",
+      "Bash(cmd.exe /c \"flutter pub get\")",
+      "Bash(cmd.exe /c \"dart --version\")",
+      "Bash(rtk read *)",
+      "Bash(cmd.exe /c \"cd /d C:\\\\Users\\\\hp\\\\Desktop\\\\Alc && flutter analyze 2>&1\")",
+      "Bash(flutter analyze *)",
+      "Bash(dart analyze *)",
+      "Bash(cmd.exe /c \"flutter analyze lib/main.dart\")",
+      "Bash(cmd.exe /c \"flutter analyze lib/\")",
+      "Bash(/mnt/c/Users/hp/flutter_sdk/flutter/bin/flutter analyze *)",
+      "Bash(/mnt/c/flutter/bin/flutter analyze *)",
+      "Bash(cmd.exe /c \"flutter analyze\")",
+      "Bash(cmd.exe /c \"flutter analyze lib/features/tables/\")"
+    ]
+  }
+}
