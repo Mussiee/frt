@@ -55,8 +55,14 @@ class ReservationsBloc extends Bloc<ReservationsEvent, ReservationsState> {
   ReservationsLoadSuccess _buildSuccess({required String filter, required String search, required int page}) {
     var list = _all.toList();
     if (filter != 'ALL') {
-      final key = filter.toLowerCase().replaceAll(' ', '_');
-      list = list.where((r) => getStatus(r) == key).toList();
+      if (filter == 'GUESTLIST') {
+        list = list.where((r) => r.source == 'guestlist').toList();
+      } else if (filter == 'ASSIGNED') {
+        list = list.where((r) => r.tableNumber != null).toList();
+      } else {
+        final key = filter.toLowerCase().replaceAll(' ', '_');
+        list = list.where((r) => getStatus(r) == key).toList();
+      }
     }
     if (search.isNotEmpty) {
       list = list.where((r) => r.customerName.toLowerCase().contains(search.toLowerCase())).toList();

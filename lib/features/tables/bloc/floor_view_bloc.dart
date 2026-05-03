@@ -1,74 +1,146 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../shared/widgets/table_circle.dart';
 import '../data/mock_tables.dart';
 import 'floor_view_event.dart';
 import 'floor_view_state.dart';
 
 class FloorViewBloc extends Bloc<FloorViewEvent, FloorViewState> {
-  List<MockTable> _all = [];
+  List<MockTable> _tables = [];
 
   FloorViewBloc() : super(FloorViewInitial()) {
     on<FloorViewLoaded>(_onLoaded);
     on<FloorViewZoneChanged>(_onZoneChanged);
     on<FloorViewTableSelected>(_onTableSelected);
-    on<FloorViewTableStatusChanged>(_onTableStatusChanged);
+    on<FloorViewTableStatusChanged>(_onStatusChanged);
+    on<FloorViewModeChanged>(_onModeChanged);
+    on<FloorViewEventSelected>(_onEventSelected);
+    on<FloorViewTableCustomerAssigned>(_onCustomerAssigned);
+    on<FloorViewTableServerAssigned>(_onServerAssigned);
+    on<FloorViewTableMarkedNoShow>(_onMarkedNoShow);
   }
 
   void _onLoaded(FloorViewLoaded event, Emitter<FloorViewState> emit) {
-    _all = List.of(mockTables);
-    emit(_buildSuccess(zone: 'ROOFTOP', selectedTableId: null));
+    _tables = List.of(mockTables);
+    emit(FloorViewLoadSuccess(
+      tables: _tables,
+      currentZone: zones.first,
+      zoneNames: zones,
+      availableEvents: mockEvents,
+    ));
   }
 
   void _onZoneChanged(FloorViewZoneChanged event, Emitter<FloorViewState> emit) {
-    emit(_buildSuccess(zone: event.zone, selectedTableId: null));
+    if (state is FloorViewLoadSuccess) {
+      final s = state as FloorViewLoadSuccess;
+      emit(FloorViewLoadSuccess(
+        tables: _tables,
+        currentZone: event.zone,
+        selectedTableId: null,
+        zoneNames: s.zoneNames,
+        isEventMode: s.isEventMode,
+        selectedEventId: s.selectedEventId,
+        availableEvents: s.availableEvents,
+      ));
+    }
   }
 
   void _onTableSelected(FloorViewTableSelected event, Emitter<FloorViewState> emit) {
     if (state is FloorViewLoadSuccess) {
       final s = state as FloorViewLoadSuccess;
-      emit(_buildSuccess(zone: s.currentZone, selectedTableId: event.tableId));
+      emit(FloorViewLoadSuccess(
+        tables: _tables,
+        currentZone: s.currentZone,
+        selectedTableId: event.tableId,
+        zoneNames: s.zoneNames,
+        isEventMode: s.isEventMode,
+        selectedEventId: s.selectedEventId,
+        availableEvents: s.availableEvents,
+      ));
     }
   }
 
-  void _onTableStatusChanged(FloorViewTableStatusChanged event, Emitter<FloorViewState> emit) {
-    _all = _all.map((t) {
-      if (t.id == event.tableId) {
-        return MockTable(
-          id: t.id,
-          label: t.label,
-          zone: t.zone,
-          status: event.newStatus,
-          capacity: t.capacity,
-          tableType: t.tableType,
-          sizeMultiplier: t.sizeMultiplier,
-          customerName: t.customerName,
-          customerPhone: t.customerPhone,
-          serverName: t.serverName,
-          serverRole: t.serverRole,
-          reservationDate: t.reservationDate,
-          guestCount: t.guestCount,
-          totalSpend: t.totalSpend,
-          sessionDuration: t.sessionDuration,
-          notes: t.notes,
-          area: t.area,
-          x: t.x,
-          y: t.y,
-        );
-      }
-      return t;
-    }).toList();
+  void _onStatusChanged(FloorViewTableStatusChanged event, Emitter<FloorViewState> emit) {
+    _updateTable(event.tableId, (t) => t.copyWith(status: event.newStatus));
+    _emitCurrent(emit);
+  }
+
+  void _onModeChanged(FloorViewModeChanged event, Emitter<FloorViewState> emit) {
     if (state is FloorViewLoadSuccess) {
       final s = state as FloorViewLoadSuccess;
-      emit(_buildSuccess(zone: s.currentZone, selectedTableId: s.selectedTableId));
+      emit(FloorViewLoadSuccess(
+        tables: _tables,
+        currentZone: s.currentZone,
+        selectedTableId: null,
+        zoneNames: s.zoneNames,
+        isEventMode: event.isEventMode,
+        selectedEventId: event.isEventMode ? (s.selectedEventId ?? mockEvents.first.id) : null,
+        availableEvents: s.availableEvents,
+      ));
     }
   }
 
-  FloorViewLoadSuccess _buildSuccess({required String zone, required String? selectedTableId}) {
-    final filtered = _all.where((t) => t.zone == zone).toList();
-    return FloorViewLoadSuccess(
-      tables: filtered,
-      currentZone: zone,
-      selectedTableId: selectedTableId,
-      zoneNames: zones,
-    );
+  void _onEventSelected(FloorViewEventSelected event, Emitter<FloorViewState> emit) {
+    if (state is FloorViewLoadSuccess) {
+      final s = state as FloorViewLoadSuccess;
+      emit(FloorViewLoadSuccess(
+        tables: _tables,
+        currentZone: s.currentZone,
+        selectedTableId: null,
+        zoneNames: s.zoneNames,
+        isEventMode: true,
+        selectedEventId: event.eventId,
+        availableEvents: s.availableEvents,
+      ));
+    }
+  }
+
+  void _onCustomerAssigned(FloorViewTableCustomerAssigned event, Emitter<FloorViewState> emit) {
+    _updateTable(event.tableId, (t) => t.copyWith(
+      status: TableStatus.reserved,
+      customerName: event.customerName,
+      customerPhone: event.customerPhone,
+      guestCount: event.guestCount,
+    ));
+    _emitCurrent(emit);
+  }
+
+  void _onServerAssigned(FloorViewTableServerAssigned event, Emitter<FloorViewState> emit) {
+    _updateTable(event.tableId, (t) => t.copyWith(serverName: event.serverName));
+    _emitCurrent(emit);
+  }
+
+  void _onMarkedNoShow(FloorViewTableMarkedNoShow event, Emitter<FloorViewState> emit) {
+    _updateTable(event.tableId, (t) => t.copyWith(
+      status: TableStatus.free,
+      customerName: null,
+      customerPhone: null,
+      guestCount: null,
+      serverName: null,
+      totalSpend: null,
+      sessionDuration: null,
+    ));
+    _emitCurrent(emit);
+  }
+
+  void _updateTable(String tableId, MockTable Function(MockTable) updater) {
+    final idx = _tables.indexWhere((t) => t.id == tableId);
+    if (idx != -1) {
+      _tables[idx] = updater(_tables[idx]);
+    }
+  }
+
+  void _emitCurrent(Emitter<FloorViewState> emit) {
+    if (state is FloorViewLoadSuccess) {
+      final s = state as FloorViewLoadSuccess;
+      emit(FloorViewLoadSuccess(
+        tables: _tables,
+        currentZone: s.currentZone,
+        selectedTableId: s.selectedTableId,
+        zoneNames: s.zoneNames,
+        isEventMode: s.isEventMode,
+        selectedEventId: s.selectedEventId,
+        availableEvents: s.availableEvents,
+      ));
+    }
   }
 }

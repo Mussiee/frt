@@ -5,6 +5,7 @@ import '../../../../shared/design_constants.dart';
 import '../../../../shared/widgets/status_chip.dart';
 import '../../../../shared/widgets/table_circle.dart';
 import '../../../tables/data/mock_tables.dart';
+import '../widgets/complete_table_sheet.dart';
 
 class TableDetailServerScreen extends StatefulWidget {
   final String id;
@@ -187,19 +188,38 @@ class _TableDetailServerScreenState extends State<TableDetailServerScreen> {
             // Mark free
             GestureDetector(
               onTap: () {
-                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Table marked as free'), backgroundColor: FocusColors.success));
-                if (context.canPop()) {
-                  context.pop();
-                } else {
-                  context.go('/my-tables');
-                }
+                showModalBottomSheet(
+                  context: context,
+                  isScrollControlled: true,
+                  backgroundColor: Colors.transparent,
+                  builder: (_) => CompleteTableSheet(
+                    tableLabel: _table.label,
+                    currentSpend: _table.totalSpend,
+                    onCompleted: () {
+                      if (context.mounted) {
+                        if (context.canPop()) {
+                          context.pop();
+                        } else {
+                          context.go('/my-tables');
+                        }
+                      }
+                    },
+                  ),
+                );
               },
               child: Container(
                 width: double.infinity,
                 height: 52,
-                decoration: BoxDecoration(color: FocusColors.error, borderRadius: BorderRadius.circular(8)),
+                decoration: BoxDecoration(color: FocusColors.success, borderRadius: BorderRadius.circular(8)),
                 alignment: Alignment.center,
-                child: Text('MARK TABLE AS FREE', style: GoogleFonts.inter(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w700, letterSpacing: 0.5)),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(Icons.receipt_long_outlined, color: Colors.white, size: 20),
+                    const SizedBox(width: 8),
+                    Text('COMPLETE TABLE', style: GoogleFonts.inter(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w700, letterSpacing: 0.5)),
+                  ],
+                ),
               ),
             ),
           ],

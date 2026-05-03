@@ -14,6 +14,7 @@ class AppSidebar extends StatelessWidget {
     UserRole.owner: [
       SidebarItem(icon: Icons.dashboard_outlined, label: 'Dashboard', route: '/dashboard'),
       SidebarItem(icon: Icons.calendar_today_outlined, label: 'Reservations', route: '/reservations'),
+      SidebarItem(icon: Icons.table_bar_outlined, label: 'Tables', route: '/tables'),
       SidebarItem(icon: Icons.people_outline, label: 'Promoters', route: '/promoters'),
       SidebarItem(icon: Icons.contacts_outlined, label: 'CRM', route: '/crm'),
       SidebarItem(icon: Icons.event_note_outlined, label: 'Event Requests', route: '/event-requests'),
@@ -23,6 +24,7 @@ class AppSidebar extends StatelessWidget {
       SidebarItem(icon: Icons.dashboard_outlined, label: 'Dashboard', route: '/dashboard'),
       SidebarItem(icon: Icons.calendar_today_outlined, label: 'Reservations', route: '/reservations'),
       SidebarItem(icon: Icons.table_bar_outlined, label: 'Tables', route: '/tables'),
+      SidebarItem(icon: Icons.qr_code_scanner_outlined, label: 'QR Scanner', route: '/scanner'),
       SidebarItem(icon: Icons.settings_outlined, label: 'Settings', route: '/settings'),
     ],
     UserRole.staff: [
@@ -37,6 +39,7 @@ class AppSidebar extends StatelessWidget {
     UserRole.promoter: [
       SidebarItem(icon: Icons.bar_chart_outlined, label: 'My Stats', route: '/my-stats'),
       SidebarItem(icon: Icons.link_outlined, label: 'My Link', route: '/my-link'),
+      SidebarItem(icon: Icons.business_outlined, label: 'My Company', route: '/my-company'),
       SidebarItem(icon: Icons.settings_outlined, label: 'Settings', route: '/settings'),
     ],
   };

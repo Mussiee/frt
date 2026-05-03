@@ -13,7 +13,7 @@ import '../../bloc/reservations_event.dart';
 import '../../bloc/reservations_state.dart';
 import '../../data/mock_reservations.dart';
 
-const _filters = ['ALL', 'PENDING', 'CONFIRMED', 'CHECKED IN', 'COMPLETED', 'NO SHOW'];
+const _filters = ['ALL', 'PENDING', 'CONFIRMED', 'CHECKED IN', 'COMPLETED', 'NO SHOW', 'GUESTLIST', 'ASSIGNED'];
 
 StatusType _statusType(String status) {
   switch (status) {

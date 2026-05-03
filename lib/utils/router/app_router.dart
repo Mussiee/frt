@@ -24,6 +24,7 @@ import '../../features/promoter_role/presentation/screens/my_stats_screen.dart';
 import '../../features/promoter_role/presentation/screens/my_link_screen.dart';
 import '../../features/notifications/presentation/screens/notifications_screen.dart';
 import '../../features/settings/presentation/screens/settings_screen.dart';
+import '../../features/promoter_role/presentation/screens/promo_company_screen.dart';
 
 class AppRouter {
   AppRouter._();
@@ -173,6 +174,11 @@ class AppRouter {
             path: '/my-link',
             name: 'my-link',
             builder: (context, state) => const MyLinkScreen(),
+          ),
+          GoRoute(
+            path: '/my-company',
+            name: 'my-company',
+            builder: (context, state) => const PromoCompanyScreen(),
           ),
           GoRoute(
             path: '/notifications',

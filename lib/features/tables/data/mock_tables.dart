@@ -44,7 +44,67 @@ class MockTable {
     required this.x,
     required this.y,
   });
+  MockTable copyWith({
+    TableStatus? status,
+    String? customerName,
+    String? customerPhone,
+    String? serverName,
+    int? guestCount,
+    double? totalSpend,
+    String? sessionDuration,
+    String? notes,
+  }) {
+    return MockTable(
+      id: id,
+      label: label,
+      zone: zone,
+      status: status ?? this.status,
+      capacity: capacity,
+      tableType: tableType,
+      sizeMultiplier: sizeMultiplier,
+      customerName: customerName ?? this.customerName,
+      customerPhone: customerPhone ?? this.customerPhone,
+      serverName: serverName ?? this.serverName,
+      serverRole: serverRole,
+      reservationDate: reservationDate,
+      guestCount: guestCount ?? this.guestCount,
+      totalSpend: totalSpend ?? this.totalSpend,
+      sessionDuration: sessionDuration ?? this.sessionDuration,
+      notes: notes ?? this.notes,
+      area: area,
+      x: x,
+      y: y,
+    );
+  }
 }
+
+class MockEvent {
+  final String id;
+  final String name;
+  final String date;
+  final String time;
+  final String venue;
+  final int totalCapacity;
+  final int reservedCount;
+  final List<String> reservedTableIds;
+
+  const MockEvent({
+    required this.id,
+    required this.name,
+    required this.date,
+    required this.time,
+    required this.venue,
+    required this.totalCapacity,
+    required this.reservedCount,
+    this.reservedTableIds = const [],
+  });
+}
+
+final List<MockEvent> mockEvents = [
+  const MockEvent(id: 'evt_001', name: 'FRIDAY NIGHT LIVE', date: 'Nov 1, 2023', time: '9:00 PM', venue: 'Focus', totalCapacity: 65, reservedCount: 22, reservedTableIds: ['s_202', 's_210', 'f_102a', 'f_107a', 's_303', 's_208']),
+  const MockEvent(id: 'evt_002', name: 'HALLOWEEN MASQUERADE', date: 'Oct 31, 2023', time: '8:00 PM', venue: 'Focus', totalCapacity: 65, reservedCount: 41, reservedTableIds: ['s_202', 's_201', 's_210', 's_209', 's_211', 's_208', 's_207', 's_204', 'f_102a', 'f_102b', 'f_107a', 'f_109a']),
+  const MockEvent(id: 'evt_003', name: 'VIP BOTTLE NIGHT', date: 'Nov 3, 2023', time: '10:00 PM', venue: 'Focus', totalCapacity: 65, reservedCount: 8, reservedTableIds: ['s_202', 's_210']),
+];
 
 final List<MockTable> mockTables = [
   // ═══════════════════════════════════════════════════════════════
@@ -76,25 +136,26 @@ final List<MockTable> mockTables = [
 
   // Right section — rectangles, 4x4 grid
   // Row 1 (y=0.08)
-  const MockTable(id: 'r_1', label: '1', zone: 'ROOFTOP', status: TableStatus.occupied, capacity: 8, tableType: TableType.rect, sizeMultiplier: 1.3, customerName: 'Julian Casablancas', guestCount: 6, serverName: 'Alex R.', totalSpend: 2400, sessionDuration: '03:10:00', area: 'ROOFTOP', x: 0.36, y: 0.08),
-  const MockTable(id: 'r_2', label: '2', zone: 'ROOFTOP', status: TableStatus.free, capacity: 8, tableType: TableType.rect, sizeMultiplier: 1.3, area: 'ROOFTOP', x: 0.52, y: 0.08),
-  const MockTable(id: 'r_3', label: '3', zone: 'ROOFTOP', status: TableStatus.free, capacity: 8, tableType: TableType.rect, sizeMultiplier: 1.3, area: 'ROOFTOP', x: 0.68, y: 0.08),
-  const MockTable(id: 'r_4', label: '4', zone: 'ROOFTOP', status: TableStatus.reserved, capacity: 8, tableType: TableType.rect, sizeMultiplier: 1.3, customerName: 'Elena Rodriguez', reservationDate: 'Oct 25, 2023', guestCount: 8, area: 'ROOFTOP', x: 0.84, y: 0.08),
+  // Row 1 (y=0.08) — sizeMultiplier reduced to 1.05 to prevent overlap
+  const MockTable(id: 'r_1', label: '1', zone: 'ROOFTOP', status: TableStatus.occupied, capacity: 8, tableType: TableType.rect, sizeMultiplier: 1.05, customerName: 'Julian Casablancas', guestCount: 6, serverName: 'Alex R.', totalSpend: 2400, sessionDuration: '03:10:00', area: 'ROOFTOP', x: 0.37, y: 0.08),
+  const MockTable(id: 'r_2', label: '2', zone: 'ROOFTOP', status: TableStatus.free, capacity: 8, tableType: TableType.rect, sizeMultiplier: 1.05, area: 'ROOFTOP', x: 0.53, y: 0.08),
+  const MockTable(id: 'r_3', label: '3', zone: 'ROOFTOP', status: TableStatus.free, capacity: 8, tableType: TableType.rect, sizeMultiplier: 1.05, area: 'ROOFTOP', x: 0.69, y: 0.08),
+  const MockTable(id: 'r_4', label: '4', zone: 'ROOFTOP', status: TableStatus.reserved, capacity: 8, tableType: TableType.rect, sizeMultiplier: 1.05, customerName: 'Elena Rodriguez', reservationDate: 'Oct 25, 2023', guestCount: 8, area: 'ROOFTOP', x: 0.86, y: 0.08),
   // Row 2 (y=0.30)
-  const MockTable(id: 'r_5', label: '5', zone: 'ROOFTOP', status: TableStatus.free, capacity: 8, tableType: TableType.rect, sizeMultiplier: 1.3, area: 'ROOFTOP', x: 0.36, y: 0.30),
-  const MockTable(id: 'r_6', label: '6', zone: 'ROOFTOP', status: TableStatus.free, capacity: 8, tableType: TableType.rect, sizeMultiplier: 1.3, area: 'ROOFTOP', x: 0.52, y: 0.30),
-  const MockTable(id: 'r_7', label: '7', zone: 'ROOFTOP', status: TableStatus.free, capacity: 8, tableType: TableType.rect, sizeMultiplier: 1.3, area: 'ROOFTOP', x: 0.68, y: 0.30),
-  const MockTable(id: 'r_8', label: '8', zone: 'ROOFTOP', status: TableStatus.free, capacity: 8, tableType: TableType.rect, sizeMultiplier: 1.3, area: 'ROOFTOP', x: 0.84, y: 0.30),
+  const MockTable(id: 'r_5', label: '5', zone: 'ROOFTOP', status: TableStatus.free, capacity: 8, tableType: TableType.rect, sizeMultiplier: 1.05, area: 'ROOFTOP', x: 0.37, y: 0.30),
+  const MockTable(id: 'r_6', label: '6', zone: 'ROOFTOP', status: TableStatus.free, capacity: 8, tableType: TableType.rect, sizeMultiplier: 1.05, area: 'ROOFTOP', x: 0.53, y: 0.30),
+  const MockTable(id: 'r_7', label: '7', zone: 'ROOFTOP', status: TableStatus.free, capacity: 8, tableType: TableType.rect, sizeMultiplier: 1.05, area: 'ROOFTOP', x: 0.69, y: 0.30),
+  const MockTable(id: 'r_8', label: '8', zone: 'ROOFTOP', status: TableStatus.free, capacity: 8, tableType: TableType.rect, sizeMultiplier: 1.05, area: 'ROOFTOP', x: 0.86, y: 0.30),
   // Row 3 (y=0.53)
-  const MockTable(id: 'r_9', label: '9', zone: 'ROOFTOP', status: TableStatus.free, capacity: 8, tableType: TableType.rect, sizeMultiplier: 1.3, area: 'ROOFTOP', x: 0.36, y: 0.53),
-  const MockTable(id: 'r_10', label: '10', zone: 'ROOFTOP', status: TableStatus.free, capacity: 8, tableType: TableType.rect, sizeMultiplier: 1.3, area: 'ROOFTOP', x: 0.52, y: 0.53),
-  const MockTable(id: 'r_11', label: '11', zone: 'ROOFTOP', status: TableStatus.free, capacity: 8, tableType: TableType.rect, sizeMultiplier: 1.3, area: 'ROOFTOP', x: 0.68, y: 0.53),
-  const MockTable(id: 'r_12', label: '12', zone: 'ROOFTOP', status: TableStatus.occupied, capacity: 8, tableType: TableType.rect, sizeMultiplier: 1.3, customerName: 'Valentino Russo', guestCount: 7, serverName: 'Sarah J.', totalSpend: 3200, sessionDuration: '04:00:00', area: 'ROOFTOP', x: 0.84, y: 0.53),
+  const MockTable(id: 'r_9', label: '9', zone: 'ROOFTOP', status: TableStatus.free, capacity: 8, tableType: TableType.rect, sizeMultiplier: 1.05, area: 'ROOFTOP', x: 0.37, y: 0.53),
+  const MockTable(id: 'r_10', label: '10', zone: 'ROOFTOP', status: TableStatus.free, capacity: 8, tableType: TableType.rect, sizeMultiplier: 1.05, area: 'ROOFTOP', x: 0.53, y: 0.53),
+  const MockTable(id: 'r_11', label: '11', zone: 'ROOFTOP', status: TableStatus.free, capacity: 8, tableType: TableType.rect, sizeMultiplier: 1.05, area: 'ROOFTOP', x: 0.69, y: 0.53),
+  const MockTable(id: 'r_12', label: '12', zone: 'ROOFTOP', status: TableStatus.occupied, capacity: 8, tableType: TableType.rect, sizeMultiplier: 1.05, customerName: 'Valentino Russo', guestCount: 7, serverName: 'Sarah J.', totalSpend: 3200, sessionDuration: '04:00:00', area: 'ROOFTOP', x: 0.86, y: 0.53),
   // Row 4 (y=0.76)
-  const MockTable(id: 'r_13', label: '13', zone: 'ROOFTOP', status: TableStatus.free, capacity: 8, tableType: TableType.rect, sizeMultiplier: 1.3, area: 'ROOFTOP', x: 0.36, y: 0.76),
-  const MockTable(id: 'r_14', label: '14', zone: 'ROOFTOP', status: TableStatus.free, capacity: 8, tableType: TableType.rect, sizeMultiplier: 1.3, area: 'ROOFTOP', x: 0.52, y: 0.76),
-  const MockTable(id: 'r_15', label: '15', zone: 'ROOFTOP', status: TableStatus.reserved, capacity: 8, tableType: TableType.rect, sizeMultiplier: 1.3, customerName: 'Soren Miller', reservationDate: 'Oct 28, 2023', guestCount: 12, area: 'ROOFTOP', x: 0.68, y: 0.76),
-  const MockTable(id: 'r_16', label: '16', zone: 'ROOFTOP', status: TableStatus.free, capacity: 8, tableType: TableType.rect, sizeMultiplier: 1.3, area: 'ROOFTOP', x: 0.84, y: 0.76),
+  const MockTable(id: 'r_13', label: '13', zone: 'ROOFTOP', status: TableStatus.free, capacity: 8, tableType: TableType.rect, sizeMultiplier: 1.05, area: 'ROOFTOP', x: 0.37, y: 0.76),
+  const MockTable(id: 'r_14', label: '14', zone: 'ROOFTOP', status: TableStatus.free, capacity: 8, tableType: TableType.rect, sizeMultiplier: 1.05, area: 'ROOFTOP', x: 0.53, y: 0.76),
+  const MockTable(id: 'r_15', label: '15', zone: 'ROOFTOP', status: TableStatus.reserved, capacity: 8, tableType: TableType.rect, sizeMultiplier: 1.05, customerName: 'Soren Miller', reservationDate: 'Oct 28, 2023', guestCount: 12, area: 'ROOFTOP', x: 0.69, y: 0.76),
+  const MockTable(id: 'r_16', label: '16', zone: 'ROOFTOP', status: TableStatus.free, capacity: 8, tableType: TableType.rect, sizeMultiplier: 1.05, area: 'ROOFTOP', x: 0.86, y: 0.76),
 
   // ═══════════════════════════════════════════════════════════════
   // FIRST FLOOR — 32 tables
@@ -172,25 +233,38 @@ final List<MockTable> mockTables = [
   const MockTable(id: 's_306', label: '306', zone: 'SECOND FLOOR', status: TableStatus.free, capacity: 6, tableType: TableType.rect, sizeMultiplier: 1.0, area: 'WEST LOUNGE AREA', x: 0.05, y: 0.55),
   const MockTable(id: 's_301', label: '301', zone: 'SECOND FLOOR', status: TableStatus.reserved, capacity: 6, tableType: TableType.rect, sizeMultiplier: 1.0, customerName: 'Adrian Miller', reservationDate: 'Oct 26, 2023', guestCount: 4, area: 'WEST LOUNGE AREA', x: 0.16, y: 0.55),
 
-  // Center large circles
-  const MockTable(id: 's_211', label: '211', zone: 'SECOND FLOOR', status: TableStatus.free, capacity: 10, tableType: TableType.largeCircle, sizeMultiplier: 1.6, area: 'CENTER FLOOR', x: 0.30, y: 0.40),
-  const MockTable(id: 's_210', label: '210', zone: 'SECOND FLOOR', status: TableStatus.occupied, capacity: 10, tableType: TableType.largeCircle, sizeMultiplier: 1.6, customerName: 'Valentino Russo', guestCount: 9, serverName: 'Alex R.', totalSpend: 5400, sessionDuration: '02:30:00', notes: 'Bottle service - Dom Perignon', area: 'CENTER FLOOR', x: 0.45, y: 0.40),
-  const MockTable(id: 's_209', label: '209', zone: 'SECOND FLOOR', status: TableStatus.free, capacity: 10, tableType: TableType.largeCircle, sizeMultiplier: 1.6, area: 'CENTER FLOOR', x: 0.60, y: 0.40),
+  // Center large circles — sizeMultiplier reduced to 1.2 and spread to prevent overlap
+  const MockTable(id: 's_211', label: '211', zone: 'SECOND FLOOR', status: TableStatus.free, capacity: 10, tableType: TableType.largeCircle, sizeMultiplier: 1.2, area: 'CENTER FLOOR', x: 0.27, y: 0.42),
+  const MockTable(id: 's_210', label: '210', zone: 'SECOND FLOOR', status: TableStatus.occupied, capacity: 10, tableType: TableType.largeCircle, sizeMultiplier: 1.2, customerName: 'Valentino Russo', guestCount: 9, serverName: 'Alex R.', totalSpend: 5400, sessionDuration: '02:30:00', notes: 'Bottle service - Dom Perignon', area: 'CENTER FLOOR', x: 0.43, y: 0.42),
+  const MockTable(id: 's_209', label: '209', zone: 'SECOND FLOOR', status: TableStatus.free, capacity: 10, tableType: TableType.largeCircle, sizeMultiplier: 1.2, area: 'CENTER FLOOR', x: 0.59, y: 0.42),
 
   // Small rect 212
-  const MockTable(id: 's_212', label: '212', zone: 'SECOND FLOOR', status: TableStatus.free, capacity: 4, tableType: TableType.rect, sizeMultiplier: 0.7, area: 'CENTER FLOOR', x: 0.40, y: 0.62),
+  const MockTable(id: 's_212', label: '212', zone: 'SECOND FLOOR', status: TableStatus.free, capacity: 4, tableType: TableType.rect, sizeMultiplier: 0.7, area: 'CENTER FLOOR', x: 0.35, y: 0.62),
 
-  // VIP Terrace — small rects
-  const MockTable(id: 's_208', label: '208', zone: 'SECOND FLOOR', status: TableStatus.occupied, capacity: 4, tableType: TableType.rect, sizeMultiplier: 0.8, customerName: 'Jonathan Sterling', guestCount: 4, serverName: 'David M.', totalSpend: 1800, sessionDuration: '02:00:00', area: 'VIP TERRACE', x: 0.68, y: 0.32),
-  const MockTable(id: 's_207', label: '207', zone: 'SECOND FLOOR', status: TableStatus.free, capacity: 4, tableType: TableType.rect, sizeMultiplier: 0.8, area: 'VIP TERRACE', x: 0.78, y: 0.32),
-  const MockTable(id: 's_206', label: '206', zone: 'SECOND FLOOR', status: TableStatus.free, capacity: 4, tableType: TableType.rect, sizeMultiplier: 0.8, area: 'VIP TERRACE', x: 0.68, y: 0.44),
-  const MockTable(id: 's_205', label: '205', zone: 'SECOND FLOOR', status: TableStatus.free, capacity: 4, tableType: TableType.rect, sizeMultiplier: 0.8, area: 'VIP TERRACE', x: 0.78, y: 0.44),
-  const MockTable(id: 's_204', label: '204', zone: 'SECOND FLOOR', status: TableStatus.reserved, capacity: 4, tableType: TableType.rect, sizeMultiplier: 0.8, customerName: 'Kelly Lowman', reservationDate: 'Oct 28, 2023', guestCount: 3, area: 'VIP TERRACE', x: 0.68, y: 0.56),
-  const MockTable(id: 's_203', label: '203', zone: 'SECOND FLOOR', status: TableStatus.free, capacity: 4, tableType: TableType.rect, sizeMultiplier: 0.8, area: 'VIP TERRACE', x: 0.78, y: 0.56),
+  // VIP Terrace — small rects (2 columns, 3 rows matching Figma)
+  const MockTable(id: 's_208', label: '208', zone: 'SECOND FLOOR', status: TableStatus.occupied, capacity: 4, tableType: TableType.rect, sizeMultiplier: 0.75, customerName: 'Jonathan Sterling', guestCount: 4, serverName: 'David M.', totalSpend: 1800, sessionDuration: '02:00:00', area: 'VIP TERRACE', x: 0.64, y: 0.30),
+  const MockTable(id: 's_207', label: '207', zone: 'SECOND FLOOR', status: TableStatus.free, capacity: 4, tableType: TableType.rect, sizeMultiplier: 0.75, area: 'VIP TERRACE', x: 0.75, y: 0.30),
+  const MockTable(id: 's_206', label: '206', zone: 'SECOND FLOOR', status: TableStatus.free, capacity: 4, tableType: TableType.rect, sizeMultiplier: 0.75, area: 'VIP TERRACE', x: 0.64, y: 0.42),
+  const MockTable(id: 's_205', label: '205', zone: 'SECOND FLOOR', status: TableStatus.free, capacity: 4, tableType: TableType.rect, sizeMultiplier: 0.75, area: 'VIP TERRACE', x: 0.75, y: 0.42),
+  const MockTable(id: 's_204', label: '204', zone: 'SECOND FLOOR', status: TableStatus.reserved, capacity: 4, tableType: TableType.rect, sizeMultiplier: 0.75, customerName: 'Kelly Lowman', reservationDate: 'Oct 28, 2023', guestCount: 3, area: 'VIP TERRACE', x: 0.64, y: 0.54),
+  const MockTable(id: 's_203', label: '203', zone: 'SECOND FLOOR', status: TableStatus.free, capacity: 4, tableType: TableType.rect, sizeMultiplier: 0.75, area: 'VIP TERRACE', x: 0.75, y: 0.54),
 
-  // VIP Terrace — large circles
-  const MockTable(id: 's_202', label: '202', zone: 'SECOND FLOOR', status: TableStatus.occupied, capacity: 12, tableType: TableType.largeCircle, sizeMultiplier: 1.8, customerName: 'Marcus Thorne', guestCount: 8, serverName: 'Sarah J.', totalSpend: 3200, sessionDuration: '04:15:00', notes: 'Anniversary celebration', area: 'VIP TERRACE', x: 0.90, y: 0.25),
-  const MockTable(id: 's_201', label: '201', zone: 'SECOND FLOOR', status: TableStatus.reserved, capacity: 12, tableType: TableType.largeCircle, sizeMultiplier: 1.8, customerName: 'Soren Miller', reservationDate: 'Oct 28, 2023', guestCount: 4, area: 'VIP TERRACE', x: 0.90, y: 0.62),
+  // 202A — 4 small stools in vertical column, left of circle 202
+  const MockTable(id: 's_202a_1', label: '202A', zone: 'SECOND FLOOR', status: TableStatus.free, capacity: 1, tableType: TableType.barStool, sizeMultiplier: 0.5, area: 'VIP TERRACE', x: 0.83, y: 0.10),
+  const MockTable(id: 's_202a_2', label: '202A', zone: 'SECOND FLOOR', status: TableStatus.free, capacity: 1, tableType: TableType.barStool, sizeMultiplier: 0.5, area: 'VIP TERRACE', x: 0.83, y: 0.16),
+  const MockTable(id: 's_202a_3', label: '202A', zone: 'SECOND FLOOR', status: TableStatus.occupied, capacity: 1, tableType: TableType.barStool, sizeMultiplier: 0.5, customerName: 'Maya Lin', guestCount: 1, totalSpend: 90, area: 'VIP TERRACE', x: 0.83, y: 0.22),
+  const MockTable(id: 's_202a_4', label: '202A', zone: 'SECOND FLOOR', status: TableStatus.free, capacity: 1, tableType: TableType.barStool, sizeMultiplier: 0.5, area: 'VIP TERRACE', x: 0.83, y: 0.28),
+
+  // VIP Terrace — large circles (202 top-right, 201 bottom-right as in Figma)
+  const MockTable(id: 's_202', label: '202', zone: 'SECOND FLOOR', status: TableStatus.occupied, capacity: 12, tableType: TableType.largeCircle, sizeMultiplier: 1.3, customerName: 'Marcus Thorne', guestCount: 8, serverName: 'Sarah J.', totalSpend: 3200, sessionDuration: '04:15:00', notes: 'Anniversary celebration', area: 'VIP TERRACE', x: 0.92, y: 0.18),
+
+  // 201A — 4 small stools in vertical column, left of circle 201
+  const MockTable(id: 's_201a_1', label: '201A', zone: 'SECOND FLOOR', status: TableStatus.free, capacity: 1, tableType: TableType.barStool, sizeMultiplier: 0.5, area: 'VIP TERRACE', x: 0.83, y: 0.60),
+  const MockTable(id: 's_201a_2', label: '201A', zone: 'SECOND FLOOR', status: TableStatus.free, capacity: 1, tableType: TableType.barStool, sizeMultiplier: 0.5, area: 'VIP TERRACE', x: 0.83, y: 0.66),
+  const MockTable(id: 's_201a_3', label: '201A', zone: 'SECOND FLOOR', status: TableStatus.free, capacity: 1, tableType: TableType.barStool, sizeMultiplier: 0.5, area: 'VIP TERRACE', x: 0.83, y: 0.72),
+  const MockTable(id: 's_201a_4', label: '201A', zone: 'SECOND FLOOR', status: TableStatus.reserved, capacity: 1, tableType: TableType.barStool, sizeMultiplier: 0.5, customerName: 'Nora Chen', guestCount: 1, area: 'VIP TERRACE', x: 0.83, y: 0.78),
+
+  const MockTable(id: 's_201', label: '201', zone: 'SECOND FLOOR', status: TableStatus.reserved, capacity: 12, tableType: TableType.largeCircle, sizeMultiplier: 1.3, customerName: 'Soren Miller', reservationDate: 'Oct 28, 2023', guestCount: 4, area: 'VIP TERRACE', x: 0.92, y: 0.70),
 ];
 
 List<MockTable> getTablesByZone(String zone) =>

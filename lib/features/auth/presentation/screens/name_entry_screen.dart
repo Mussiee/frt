@@ -115,7 +115,7 @@ class _NameEntryScreenState extends State<NameEntryScreen> {
                   ),
                   const SizedBox(height: 12),
                   const Text(
-                    'We need this for the floor reservation\nsystem and guest check-ins.',
+                    'Please Enter your name to continue',
                     style: TextStyle(
                       color: AppColors.grey,
                       fontSize: 14,

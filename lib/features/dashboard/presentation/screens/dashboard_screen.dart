@@ -36,21 +36,29 @@ class DashboardScreen extends StatelessWidget {
             Text(MockSession.instance.userName, style: GoogleFonts.inter(color: FocusColors.textPrimary, fontSize: 24, fontWeight: FontWeight.w800)),
             const SizedBox(height: 20),
 
-            // Stats
-            GridView.count(
-              crossAxisCount: 2,
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              mainAxisSpacing: 10,
-              crossAxisSpacing: 10,
-              childAspectRatio: 1.7,
-              children: const [
-                StatsCard(label: 'Pending Requests', value: '24', trend: '+3 today', trendPositive: true),
-                StatsCard(label: 'Today', value: '08'),
-                StatsCard(label: 'Active Promoters', value: '142', trend: '6 online', trendPositive: true),
-                StatsCard(label: "Tonight's Revenue", value: '\$4,820', trend: 'Peak hour', trendPositive: true),
-              ],
+            // Stats grid — 2x2, IntrinsicHeight equalises card heights
+            IntrinsicHeight(
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Expanded(child: StatsCard(label: 'Pending Requests', value: '24', trend: '+3 today', trendPositive: true)),
+                  const SizedBox(width: 10),
+                  Expanded(child: StatsCard(label: 'Wk Revenue ▲', value: '08')),
+                ],
+              ),
             ),
+            const SizedBox(height: 10),
+            IntrinsicHeight(
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Expanded(child: StatsCard(label: 'Active Promoters', value: '142', trend: '6 online', trendPositive: true)),
+                  const SizedBox(width: 10),
+                  Expanded(child: StatsCard(label: "Tonight's Revenue", value: '\$4,820', trend: 'Peak hour', trendPositive: true)),
+                ],
+              ),
+            ),
+
             const SizedBox(height: 24),
 
             // Live Request Queue

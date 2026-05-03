@@ -1,1 +1,14 @@
 build/
+.dart_tool/
+.packages
+.pub/
+coverage/
+*.log
+*.iml
+.idea/
+.vscode/
+.flutter-plugins
+.flutter-plugins-dependencies
+android/local.properties
+.agent/
+.prompts/

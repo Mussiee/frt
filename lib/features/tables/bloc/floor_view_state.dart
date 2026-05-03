@@ -14,14 +14,20 @@ class FloorViewLoadSuccess extends FloorViewState {
   final String currentZone;
   final String? selectedTableId;
   final List<String> zoneNames;
+  final bool isEventMode;
+  final String? selectedEventId;
+  final List<MockEvent> availableEvents;
 
   const FloorViewLoadSuccess({
     required this.tables,
     required this.currentZone,
     this.selectedTableId,
     required this.zoneNames,
+    this.isEventMode = false,
+    this.selectedEventId,
+    this.availableEvents = const [],
   });
 
   @override
-  List<Object?> get props => [tables, currentZone, selectedTableId, zoneNames];
+  List<Object?> get props => [tables, currentZone, selectedTableId, zoneNames, isEventMode, selectedEventId, availableEvents];
 }

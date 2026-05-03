@@ -30,3 +30,50 @@ class FloorViewTableStatusChanged extends FloorViewEvent {
   @override
   List<Object?> get props => [tableId, newStatus];
 }
+
+class FloorViewModeChanged extends FloorViewEvent {
+  final bool isEventMode;
+  const FloorViewModeChanged(this.isEventMode);
+  @override
+  List<Object?> get props => [isEventMode];
+}
+
+class FloorViewEventSelected extends FloorViewEvent {
+  final String eventId;
+  const FloorViewEventSelected(this.eventId);
+  @override
+  List<Object?> get props => [eventId];
+}
+
+class FloorViewTableCustomerAssigned extends FloorViewEvent {
+  final String tableId;
+  final String customerName;
+  final String? customerPhone;
+  final int guestCount;
+  const FloorViewTableCustomerAssigned({
+    required this.tableId,
+    required this.customerName,
+    this.customerPhone,
+    required this.guestCount,
+  });
+  @override
+  List<Object?> get props => [tableId, customerName, customerPhone, guestCount];
+}
+
+class FloorViewTableServerAssigned extends FloorViewEvent {
+  final String tableId;
+  final String serverName;
+  const FloorViewTableServerAssigned({
+    required this.tableId,
+    required this.serverName,
+  });
+  @override
+  List<Object?> get props => [tableId, serverName];
+}
+
+class FloorViewTableMarkedNoShow extends FloorViewEvent {
+  final String tableId;
+  const FloorViewTableMarkedNoShow(this.tableId);
+  @override
+  List<Object?> get props => [tableId];
+}

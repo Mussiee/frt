@@ -19,29 +19,33 @@ class StatsCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
       decoration: cardDecoration(),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.max,
         children: [
           Text(
             label.toUpperCase(),
             style: GoogleFonts.inter(
               color: FocusColors.textSecondary,
-              fontSize: 10,
+              fontSize: 9,
               fontWeight: FontWeight.w600,
-              letterSpacing: 1,
+              letterSpacing: 0.8,
             ),
+            overflow: TextOverflow.ellipsis,
+            maxLines: 1,
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: 6),
           Text(
             value,
             style: GoogleFonts.inter(
               color: FocusColors.accent,
-              fontSize: 24,
+              fontSize: 22,
               fontWeight: FontWeight.w800,
             ),
           ),
+
           if (trend != null) ...[
             const SizedBox(height: 6),
             Row(
