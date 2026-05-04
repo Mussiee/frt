@@ -16,6 +16,8 @@ class TableCircleWidget extends StatelessWidget {
     required this.onTap,
   });
 
+  static const double _tableScale = 0.72;
+
   Color get _statusColor {
     switch (table.status) {
       case TableStatus.free:
@@ -29,11 +31,12 @@ class TableCircleWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isCircle = table.tableType == TableType.barStool ||
+    final isCircle =
+        table.tableType == TableType.barStool ||
         table.tableType == TableType.circle ||
         table.tableType == TableType.largeCircle;
 
-    final baseSize = 42.0 * table.sizeMultiplier;
+    final baseSize = 42.0 * table.sizeMultiplier * _tableScale;
 
     if (isCircle) {
       return _buildCircle(baseSize);
@@ -43,7 +46,7 @@ class TableCircleWidget extends StatelessWidget {
   }
 
   Widget _buildCircle(double size) {
-    final fontSize = (size * 0.28).clamp(8.0, 16.0);
+    final fontSize = (size * 0.28).clamp(7.0, 14.0);
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -54,10 +57,16 @@ class TableCircleWidget extends StatelessWidget {
           shape: BoxShape.circle,
           border: Border.all(
             color: isSelected ? FocusColors.accent : _statusColor,
-            width: isSelected ? 3 : 2,
+            width: isSelected ? 2.5 : 1.6,
           ),
           boxShadow: isSelected
-              ? [BoxShadow(color: FocusColors.accent.withValues(alpha: 0.4), blurRadius: 12, spreadRadius: 2)]
+              ? [
+                  BoxShadow(
+                    color: FocusColors.accent.withValues(alpha: 0.4),
+                    blurRadius: 12,
+                    spreadRadius: 2,
+                  ),
+                ]
               : null,
         ),
         alignment: Alignment.center,
@@ -77,7 +86,7 @@ class TableCircleWidget extends StatelessWidget {
   Widget _buildRect(double baseSize) {
     final width = baseSize * 1.35;
     final height = baseSize * 1.0;
-    final fontSize = (baseSize * 0.30).clamp(8.0, 16.0);
+    final fontSize = (baseSize * 0.30).clamp(7.0, 14.0);
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -88,10 +97,16 @@ class TableCircleWidget extends StatelessWidget {
           borderRadius: BorderRadius.circular(6),
           border: Border.all(
             color: isSelected ? FocusColors.accent : _statusColor,
-            width: isSelected ? 3 : 2,
+            width: isSelected ? 2.5 : 1.6,
           ),
           boxShadow: isSelected
-              ? [BoxShadow(color: FocusColors.accent.withValues(alpha: 0.4), blurRadius: 12, spreadRadius: 2)]
+              ? [
+                  BoxShadow(
+                    color: FocusColors.accent.withValues(alpha: 0.4),
+                    blurRadius: 12,
+                    spreadRadius: 2,
+                  ),
+                ]
               : null,
         ),
         alignment: Alignment.center,

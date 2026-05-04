@@ -26,6 +26,12 @@ import '../../features/notifications/presentation/screens/notifications_screen.d
 import '../../features/settings/presentation/screens/settings_screen.dart';
 import '../../features/promoter_role/presentation/screens/promo_company_screen.dart';
 
+// ─── DEV TOGGLE ──────────────────────────────────────────────────────────────
+// Set to `true`  → skip login, jump straight to the app (uses MockSession role)
+// Set to `false` → normal Firebase phone-auth flow
+const bool kBypassAuth = true;
+// ─────────────────────────────────────────────────────────────────────────────
+
 class AppRouter {
   AppRouter._();
 
@@ -41,6 +47,14 @@ class AppRouter {
   static final GoRouter router = GoRouter(
     initialLocation: '/splash',
     redirect: (context, state) {
+      // DEV: bypass auth entirely — remove the flag above to re-enable
+      if (kBypassAuth) {
+        final path = state.uri.path;
+        // Redirect splash/phone/otp straight to the app
+        if (_authOnlyRoutes.contains(path) || path == '/') return '/home';
+        return null;
+      }
+
       final path = state.uri.path;
       final isAuthenticated = FirebaseAuth.instance.currentUser != null;
 
